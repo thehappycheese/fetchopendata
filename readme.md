@@ -11,11 +11,7 @@ A python package containing tools to download data from various open data portal
 
 ## 1. Installation
 
-TODO: add installation URL here
-
-```bash
-pip install 
-```
+Please see [Releases](https://github.com/thehappycheese/fetchopendata/releases) for installation instructions.
 
 ## 2. Usage
 
