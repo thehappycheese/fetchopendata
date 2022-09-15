@@ -1,8 +1,6 @@
 from typing import Any, Optional, Dict
 import requests
-import urllib
 from urllib.parse import urlencode
-import math
 import pandas as pd
 
 DATA_SOURCE_URL = "https://mrgis.mainroads.wa.gov.au/arcgis/rest/services/OpenData/RoadAssets_DataPortal/MapServer/17/query"
@@ -74,6 +72,9 @@ def fetch_road_network_info(
 	if query_params is None:
 		query_params = DEFAULT_PARAMETERS
 	
+	if additional_params is None:
+		additional_params = {}
+
 	query_params |= additional_params
 
 	response = requests.request("GET", f"{url}?" + urlencode(query_params | {"returnCountOnly":True}))
@@ -109,7 +110,7 @@ def fetch_road_network_info(
 		response = requests.request(
 			"GET",
 				f"{url}?"
-			+ urllib.parse.urlencode(
+			+ urlencode(
 				{"resultOffset":offset} | query_params
 			)
 		)
