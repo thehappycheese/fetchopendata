@@ -13,6 +13,12 @@ A python package containing tools to download data from various open data portal
 
 Please see [Releases](https://github.com/thehappycheese/fetchopendata/releases) for installation instructions.
 
+Or, to install the main branch please use:
+
+```bash
+pip install "https://github.com/thehappycheese/fetchopendata/zipball/main/"
+```
+
 ## 2. Usage
 
 ### 2.1. `fetch_road_network_info()`
