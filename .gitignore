@@ -7,3 +7,4 @@ dist/
 *.egg-info/
 Thumbs.db
 .pytest_cache/
+.coverage
