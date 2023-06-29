@@ -10,6 +10,7 @@ DEFAULT_PARAMETERS = {
     "outFields":",".join(["ROAD", "START_SLK", "END_SLK", "CWY", "NETWORK_TYPE", "START_TRUE_DIST", "END_TRUE_DIST", "RA_NO"]),
     "outSR":4326,
     "f":"json",
+    "orderByFields":"OBJECTID", # otherwise paging can break :(
     "returnGeometry":False,
 }
 
