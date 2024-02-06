@@ -4,43 +4,31 @@ build-backend = "hatchling.build"
 
 [project]
 name = "fetchopendata"
-description = 'tools to download open datasets'
+version = "0.3.0"
+description = 'Download the Road Network dataset from the Main Roads Western Australia Open Data Portal'
 readme = "readme.md"
 requires-python = ">=3.9"
 license = ""
-keywords = []
+keywords = ["Main Roads Open Data Portal", "Road Network Geometry", "Western Australia"]
 authors = [
   { name = "thehappycheese"},
 ]
-classifiers = [
-  "Development Status :: 4 - Beta",
-  "Programming Language :: Python",
-  "Programming Language :: Python :: 3.9",
-  "Programming Language :: Python :: 3.10",
-  "Programming Language :: Python :: 3.11",
-  "Programming Language :: Python :: Implementation :: CPython",
-  "Programming Language :: Python :: Implementation :: PyPy",
-]
 dependencies = [
   "pandas",
-  "pandasdmx",
   "requests"
 ]
-dynamic = ["version"]
 
 [project.urls]
 Documentation = "https://github.com/thehappycheese/fetchopendata#readme"
 Issues = "https://github.com/thehappycheese/fetchopendata/issues"
 Source = "https://github.com/thehappycheese/fetchopendata"
 
-[tool.hatch.version]
-path = "src/fetchopendata/__about__.py"
-
 [tool.hatch.envs.default]
 dependencies = [
   "pytest",
   "pytest-cov",
 ]
+
 [tool.hatch.envs.default.scripts]
 cov = "pytest --cov-report=term-missing --cov-config=pyproject.toml --cov=fetchopendata --cov=tests {args}"
 no-cov = "cov --no-cov {args}"
