@@ -6,6 +6,8 @@ A python package containing tools to download data from various open data portal
 - [2. Usage](#2-usage)
   - [2.1. `fetch_road_network_info()`](#21-fetch_road_network_info)
     - [2.1.1. Parameters](#211-parameters)
+- [3. Examples](#3-examples)
+  - [3.1. Download Main Roads Speed Limit Zones](#31-download-main-roads-speed-limit-zones)
 
 ## 1. Installation
 
@@ -81,3 +83,59 @@ df = fetch_road_network_info(
   }
 )
 ```
+
+
+## 3. Examples
+
+### 3.1. Download Main Roads Speed Limit Zones
+
+The following example also downloads and converts the geometry into a geopandas dataframe.
+
+If you dont need the spatial geometry, then set `"returnGeometry":False,` and skip the last 4 lines.
+
+```python
+#!pip install "https://github.com/thehappycheese/fetchopendata/zipball/main/"
+
+from fetchopendata import fetch_road_network_info
+from shapely import MultiLineString
+import geopandas as gpd
+
+result = fetch_road_network_info(
+    url="https://mrgis.mainroads.wa.gov.au/arcgis/rest/services/OpenData/RoadAssets_DataPortal/MapServer/8/query",
+    query_params={
+        "where":"1=1",
+        "outFields":",".join([
+            "ROAD",
+            "START_SLK",
+            "END_SLK",
+            "CWY",
+            "NETWORK_TYPE",
+            "START_TRUE_DIST",
+            "END_TRUE_DIST",
+            "RA_NO",
+            "SPEED_LIMIT",
+            "LG_NO"
+        ]),
+        "outSR":4326,
+        "f":"json",
+        "orderByFields":"OBJECTID", # otherwise paging can break :(
+        "returnGeometry":True,
+    }
+)
+result=result.rename(columns={"geometry.paths":"geometry"})
+result["geometry"] = result["geometry"].apply(MultiLineString)
+result = gpd.GeoDataFrame(result)
+result.plot(column="SPEED_LIMIT",figsize=(10,10))
+```
+
+![Plot of Speed Limits](./readme-extras/example-speed-zones.png)
+
+```python
+result[result["ROAD"].str.startswith("H")].sample(3)
+```
+
+|       | ROAD | START_SLK | END_SLK | CWY    | NETWORK_TYPE | START_TRUE_DIST | END_TRUE_DIST | RA_NO | SPEED_LIMIT | LG_NO | geometry                                                        |
+| ----: | :--- | --------: | ------: | :----- | :----------- | --------------: | ------------: | ----: | :---------- | ----: | :-------------------------------------------------------------- |
+| 61369 | H013 |      0.85 |    0.87 | Single | State Road   |            0.85 |          0.87 |    07 | 60km/h      |   129 | MULTILINESTRING ((115.88294799951457 -31.973904999856547, ...)) |
+| 66954 | H600 |         0 |    0.15 | Single | State Road   |               0 |          0.15 |    07 | 100km/h     |   131 | MULTILINESTRING ((115.78322599991672 -31.81404599867531, ...))  |
+| 61359 | H036 |      3.39 |    7.08 | Single | State Road   |            0.62 |          4.31 |    07 | 60km/h      |   116 | MULTILINESTRING ((115.75205299929262 -32.01611699965741, ...))  |
